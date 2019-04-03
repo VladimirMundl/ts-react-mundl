@@ -6,6 +6,9 @@ module.exports = {
     path: path.resolve(__dirname, "build"),
     filename: "bundle.js"
   },
+  devServer: {
+    port: 9000
+  },
   module: {
     rules: [
       {
