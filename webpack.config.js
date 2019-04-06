@@ -1,5 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin"); 
 
 module.exports = {
   entry: "./src/index.tsx",
@@ -20,13 +22,21 @@ module.exports = {
         enforce: "pre",
         test: /\.js$/,
         loader: "source-map-loader"
+      },
+      { test: /\.scss$/, 
+        use: [ 
+          MiniCssExtractPlugin.loader, 
+          { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } }, 
+          { loader: 'sass-loader', options: { sourceMap: true } },
+         ], 
       }
     ]
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: "./index.html"
-    })
+    }),
+    new MiniCssExtractPlugin({ filename: '[name].css', chunkFilename: '[id].css', })
   ],
   devtool: "source-map",
   resolve: {
