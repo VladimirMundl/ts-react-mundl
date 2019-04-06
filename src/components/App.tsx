@@ -10,7 +10,7 @@ export class App extends React.Component<{}, IState> {
     };
   }
 
-  handleSubmit(e: any) {
+  public handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
     e.preventDefault();
     this.setState({
       currentNote: "",
@@ -21,7 +21,14 @@ export class App extends React.Component<{}, IState> {
     })
   }
 
-  render() {
+
+
+
+  public renderNotes(): JSX.Element[] {
+    return this.state.notes.map((note: string, index: number) => <div key={index}>{note}</div>);
+  };
+
+  public render(): JSX.Element {
     console.log(this.state)
     return (
       <div>
@@ -35,6 +42,7 @@ export class App extends React.Component<{}, IState> {
           />
           <button type="submit">add note</button>
         </form>
+        <section>{ this.renderNotes() }</section>
       </div>
     );
   }
