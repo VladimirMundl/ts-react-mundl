@@ -1,4 +1,5 @@
 import * as React from "react";
+import List from "./List";
 import { number } from "prop-types";
 
 export class App extends React.Component<{}, IState> {
@@ -6,6 +7,8 @@ export class App extends React.Component<{}, IState> {
     super(props);
 
     this.state = {
+      isLoading: true,
+      data: [],
       currentNote: "",
       notes: []
     };
@@ -26,12 +29,14 @@ export class App extends React.Component<{}, IState> {
   }
 
   public deleteNote(id: number): void {
-    const filteredNotes: Array<INote> = this.state.notes.filter((note: INote) => note.id !== id);
-    this.setState({notes: filteredNotes})
+    const filteredNotes: Array<INote> = this.state.notes.filter(
+      (note: INote) => note.id !== id
+    );
+    this.setState({ notes: filteredNotes });
   }
 
   public renderNotes(): JSX.Element[] {
-    return this.state.notes.map((note: INote, index: number) => {
+    return this.state.notes.map((note: INote) => {
       return (
         <div key={note.id}>
           <span>{note.value}</span>
@@ -41,23 +46,36 @@ export class App extends React.Component<{}, IState> {
     });
   }
 
+  public componentDidMount() {
+    this.setState({ isLoading: true });
+    fetch("https://private-anon-2520b377ba-note10.apiary-mock.com/notes")
+      .then(response => response.json())
+      .then(data => this.setState({ data: data, isLoading: false }));
+  }
+
   public render(): JSX.Element {
-    console.log(this.state);
-    return (
-      <div>
-        <h1>Notes application</h1>
-        <form onSubmit={e => this.handleSubmit(e)}>
-          <input
-            type="text"
-            placeholder="add something"
-            value={this.state.currentNote}
-            onChange={e => this.setState({ currentNote: e.target.value })}
-          />
-          <button type="submit">add note</button>
-        </form>
-        <section>{this.renderNotes()}</section>
-      </div>
-    );
+    const { data, isLoading } = this.state;
+
+    if (isLoading) {
+      return <p>Loading...</p>;
+    } else {
+      return (
+        <div>
+          <List data={...data} />
+          <h2>New Comments</h2>
+          <form onSubmit={e => this.handleSubmit(e)}>
+            <input
+              type="text"
+              placeholder="add something"
+              value={this.state.currentNote}
+              onChange={e => this.setState({ currentNote: e.target.value })}
+            />
+            <button type="submit">add note</button>
+          </form>
+          <section>{this.renderNotes()}</section>
+        </div>
+      );
+    }
   }
 
   private _timeInMilliseconds(): number {
@@ -67,6 +85,8 @@ export class App extends React.Component<{}, IState> {
 }
 
 interface IState {
+  isLoading: boolean;
+  data: Array<object>;
   currentNote: string;
   notes: Array<INote>;
 }
