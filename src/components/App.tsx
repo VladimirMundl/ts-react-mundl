@@ -1,6 +1,7 @@
 import * as React from "react";
 import List from "./List";
-import { number } from "prop-types";
+import Note from "./Note";
+// import { number } from "prop-types";
 
 export class App extends React.Component<{}, IState> {
   constructor(props: {}) {
@@ -61,22 +62,25 @@ export class App extends React.Component<{}, IState> {
     } else {
       return (
         <div>
-          <List data={...data} />
-          <h2>New Comments</h2>
+          <h2>New Note</h2>
           <form onSubmit={e => this.handleSubmit(e)}>
-            <input
-              type="text"
+            <textarea 
               placeholder="add something"
               value={this.state.currentNote}
-              onChange={e => this.setState({ currentNote: e.target.value })}
-            />
+              onChange={e => this.setState({ currentNote: e.target.value })}>>
+              aaa
+              </textarea>
             <button type="submit">add note</button>
           </form>
           <section>{this.renderNotes()}</section>
+          <h2>List of Notes</h2>
+          <Note data={...data} />
         </div>
       );
     }
   }
+
+  
 
   private _timeInMilliseconds(): number {
     const date: Date = new Date();
