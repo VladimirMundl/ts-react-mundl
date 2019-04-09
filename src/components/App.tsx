@@ -21,43 +21,41 @@ export class App extends React.Component<{}, IState> {
 
   public handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
     e.preventDefault();
-    if(this.state.currentNote !== "") {
-    this.setState({
-      currentNote: "",
-      notes: [
-        ...this.state.notes,
-        {
-          id: this._timeInMilliseconds(),
-          value: this.state.currentNote
-        }
-      ]
-    });
-  } else this.setState({invalidText: true})
+    if (this.state.currentNote !== "") {
+      this.setState({
+        currentNote: "",
+        notes: [
+          ...this.state.notes,
+          {
+            id: this._timeInMilliseconds(),
+            title: this.state.currentNote
+          }
+        ]
+      });
+    } else this.setState({ invalidText: true });
   }
 
-  public deleteNote(id: number): void {
+  public deleteNote = (id: number): void => {
     // const filteredNotes: Array<INote> = this.state.notes.filter(
     //   (note: INote) => note.id !== id
     // );
 
-    fetch("https://private-anon-247962603d-note10.apiary-mock.com/notes/1",
-    {
-        method: "DELETE",
-        headers: {
-            'Content-Type': 'application/json'
-        }   
-    }).then(response => this.setState({ deleteResponse: response.ok}));
-     
+    fetch(`https://private-anon-247962603d-note10.apiary-mock.com/notes/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then(response => this.setState({ deleteResponse: response.ok }));
 
-    console.log("delete")
+    console.log("delete");
     // this.setState({ notes: filteredNotes });
-  }
+  };
 
   public renderNotes(): JSX.Element[] {
     return this.state.notes.map((note: INote) => {
       return (
         <div key={note.id}>
-          <span>{note.value}</span>
+          <span>{note.title}</span>
           <button onClick={() => this.deleteNote(note.id)}>Delete</button>
         </div>
       );
@@ -81,12 +79,13 @@ export class App extends React.Component<{}, IState> {
         <div>
           <h2>New Note</h2>
           <form onSubmit={e => this.handleSubmit(e)}>
-            <textarea 
+            <textarea
               placeholder="add something"
               value={this.state.currentNote}
-              onChange={e => this.setState({ currentNote: e.target.value })}>>
-              aaa
-              </textarea>
+              onChange={e => this.setState({ currentNote: e.target.value })}
+            >
+              > aaa
+            </textarea>
             <button type="submit">add note</button>
           </form>
           <section>{this.renderNotes()}</section>
@@ -97,24 +96,22 @@ export class App extends React.Component<{}, IState> {
     }
   }
 
-  
-
   private _timeInMilliseconds(): number {
     const date: Date = new Date();
     return date.getTime();
   }
 }
 
+export interface INote {
+  title: string;
+  id: number;
+}
+
 interface IState {
   isLoading: boolean;
   invalidText: boolean;
-  deleteResponse:boolean;
+  deleteResponse: boolean;
   data: Array<object>;
   currentNote: string;
   notes: Array<INote>;
-}
-
-interface INote {
-  id: number;
-  value: string;
 }
