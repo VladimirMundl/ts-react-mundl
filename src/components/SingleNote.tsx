@@ -20,6 +20,7 @@ export default class SingleNote extends React.Component<IProps, IState> {
         <h3>Note {note.id.toString().substring(0, 3)}</h3>
           <div key={note.id}>
             <button onClick={() => this.showDetail()}>{this.state.detail ? `hide detail` : `show detail`}</button>  
+            <button onClick={() => this.props.deleteNote()}>delete note</button>  
             { this.state.detail ? <div>{note.title}</div> : <div>{`${note.title.substring(0, 9)}...`}</div> }
           </div>
         
@@ -29,7 +30,8 @@ export default class SingleNote extends React.Component<IProps, IState> {
 }
 
 interface IProps {
-  note: any;
+    note: any;
+    deleteNote: any;
 }
 
 interface IState {

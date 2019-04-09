@@ -11,7 +11,9 @@ export class App extends React.Component<{}, IState> {
 
     this.state = {
       isLoading: true,
+      invalidText: false,
       data: [],
+      deleteResponse: false,
       currentNote: "",
       notes: []
     };
@@ -30,14 +32,25 @@ export class App extends React.Component<{}, IState> {
         }
       ]
     });
-  } else console.log("vypln pole")
+  } else this.setState({invalidText: true})
   }
 
   public deleteNote(id: number): void {
-    const filteredNotes: Array<INote> = this.state.notes.filter(
-      (note: INote) => note.id !== id
-    );
-    this.setState({ notes: filteredNotes });
+    // const filteredNotes: Array<INote> = this.state.notes.filter(
+    //   (note: INote) => note.id !== id
+    // );
+
+    fetch("https://private-anon-247962603d-note10.apiary-mock.com/notes/1",
+    {
+        method: "DELETE",
+        headers: {
+            'Content-Type': 'application/json'
+        }   
+    }).then(response => this.setState({ deleteResponse: response.ok}));
+     
+
+    console.log("delete")
+    // this.setState({ notes: filteredNotes });
   }
 
   public renderNotes(): JSX.Element[] {
@@ -77,7 +90,8 @@ export class App extends React.Component<{}, IState> {
             <button type="submit">add note</button>
           </form>
           <section>{this.renderNotes()}</section>
-          <List data={...data} />
+          <List data={...data} deleteNote={this.deleteNote} />
+          <div>{this.state.deleteResponse ? "note deleted" : null}</div>
         </div>
       );
     }
@@ -93,6 +107,8 @@ export class App extends React.Component<{}, IState> {
 
 interface IState {
   isLoading: boolean;
+  invalidText: boolean;
+  deleteResponse:boolean;
   data: Array<object>;
   currentNote: string;
   notes: Array<INote>;
