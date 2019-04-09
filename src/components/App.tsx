@@ -1,9 +1,5 @@
 import * as React from "react";
-// import GridNotes from "./GridNote";
-
 import List from "./List";
-
-// import { number } from "prop-types";
 
 export class App extends React.Component<{}, IState> {
   constructor(props: {}) {
@@ -13,9 +9,9 @@ export class App extends React.Component<{}, IState> {
       isLoading: true,
       invalidText: false,
       data: [],
-      deleteResponse: false,
       currentNote: "",
-      notes: []
+      notes: [],
+      message: ""
     };
   }
 
@@ -24,43 +20,69 @@ export class App extends React.Component<{}, IState> {
     if (this.state.currentNote !== "") {
       this.setState({
         currentNote: "",
-        notes: [
-          ...this.state.notes,
-          {
-            id: this._timeInMilliseconds(),
-            title: this.state.currentNote
-          }
-        ]
-      });
+       });
+       this.addNote(this.state.currentNote)
     } else this.setState({ invalidText: true });
   }
 
   public deleteNote = (id: number): void => {
-    // const filteredNotes: Array<INote> = this.state.notes.filter(
-    //   (note: INote) => note.id !== id
-    // );
-
-    fetch(`https://private-anon-247962603d-note10.apiary-mock.com/notes/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json"
+    fetch(
+      `https://private-anon-247962603d-note10.apiary-mock.com/notes/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        }
       }
-    }).then(response => this.setState({ deleteResponse: response.ok }));
-
-    console.log("delete");
-    // this.setState({ notes: filteredNotes });
+    )
+      .then(response => console.log(response))
+      .then(this.showMessage("deleted"));
   };
 
-  public renderNotes(): JSX.Element[] {
-    return this.state.notes.map((note: INote) => {
-      return (
-        <div key={note.id}>
-          <span>{note.title}</span>
-          <button onClick={() => this.deleteNote(note.id)}>Delete</button>
-        </div>
-      );
-    });
+  public addNote = (title: string): void => {
+    fetch("https://private-anon-247962603d-note10.apiary-mock.com/notes", {
+      method: 'POST',
+      body: JSON.stringify({title})
+    }).then(response => {
+      if(response.ok) {
+        this.showMessage("created")
+    }
+    throw new Error('Request failed!');
+    }, networkError => {
+    console.log(networkError.message)
+    }).then(jsonResponse => {
+    return jsonResponse
+})
   }
+
+  public editNote = (id: number, title: string): void => {
+    fetch(`https://private-anon-247962603d-note10.apiary-mock.com/notes${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({title})
+    }).then(response => {
+      if(response.ok) {
+        this.showMessage("created")
+    }
+    throw new Error('Request failed!');
+    }, networkError => {
+    console.log(networkError.message)
+    }).then(jsonResponse => {
+    return jsonResponse
+})
+  }
+
+
+
+  public showMessage = (action: string): any => {
+    this.setState({ message: action });
+      setTimeout(
+        function() {
+          this.setState({ message: "" });
+        }.bind(this),
+        3000
+      );
+
+  };
 
   public componentDidMount() {
     this.setState({ isLoading: true });
@@ -84,22 +106,17 @@ export class App extends React.Component<{}, IState> {
               value={this.state.currentNote}
               onChange={e => this.setState({ currentNote: e.target.value })}
             >
-              > aaa
+              >
             </textarea>
             <button type="submit">add note</button>
           </form>
-          <section>{this.renderNotes()}</section>
           <List data={...data} deleteNote={this.deleteNote} />
-          <div>{this.state.deleteResponse ? "note deleted" : null}</div>
+          <div>{this.state.message}</div>
         </div>
       );
     }
   }
 
-  private _timeInMilliseconds(): number {
-    const date: Date = new Date();
-    return date.getTime();
-  }
 }
 
 export interface INote {
@@ -110,8 +127,8 @@ export interface INote {
 interface IState {
   isLoading: boolean;
   invalidText: boolean;
-  deleteResponse: boolean;
   data: Array<object>;
   currentNote: string;
   notes: Array<INote>;
+  message: string;
 }
