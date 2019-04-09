@@ -1,6 +1,8 @@
 import * as React from "react";
+// import GridNotes from "./GridNote";
+
 import List from "./List";
-import Note from "./Note";
+
 // import { number } from "prop-types";
 
 export class App extends React.Component<{}, IState> {
@@ -17,6 +19,7 @@ export class App extends React.Component<{}, IState> {
 
   public handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
     e.preventDefault();
+    if(this.state.currentNote !== "") {
     this.setState({
       currentNote: "",
       notes: [
@@ -27,6 +30,7 @@ export class App extends React.Component<{}, IState> {
         }
       ]
     });
+  } else console.log("vypln pole")
   }
 
   public deleteNote(id: number): void {
@@ -73,8 +77,7 @@ export class App extends React.Component<{}, IState> {
             <button type="submit">add note</button>
           </form>
           <section>{this.renderNotes()}</section>
-          <h2>List of Notes</h2>
-          <Note data={...data} />
+          <List data={...data} />
         </div>
       );
     }

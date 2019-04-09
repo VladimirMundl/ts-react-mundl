@@ -1,29 +1,23 @@
 import * as React from "react";
+import SingleNote from "./SingleNote";
 
 export default class List extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
     this.state = {
-        detail: false
+        
     };
   }
 
-  public showDetail(): void {
-      this.setState({detail: !this.state.detail})
-  }
 
   public render(): JSX.Element {
      const { data } = this.props
     return (
       <div>
-        <h2>List of Comments</h2>
-        {data.map((comment: IComment) => (
-          <div key={comment.id}>
-            <div>{comment.id}</div>
-            <button>show detail</button>
-            <div>{comment.title}</div>
-          </div>
+        <h2>List of Notes</h2>
+        {data.map((note: INote) => (
+          <SingleNote note={note}  />
         ))}
       </div>
     );
@@ -35,10 +29,11 @@ interface IProps {
 }
 
 interface IState {
-    detail: boolean;
+ 
 }
 
-interface IComment {
+interface INote {
   title: string;
   id: string;
 }
+
