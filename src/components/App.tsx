@@ -56,20 +56,15 @@ export class App extends React.Component<{}, IState> {
   }
 
   public editNote = (id: number, title: string): void => {
-    fetch(`https://private-anon-247962603d-note10.apiary-mock.com/notes${id}`, {
+    fetch(`https://private-anon-247962603d-note10.apiary-mock.com/notes/${id}`, {
       method: 'PUT',
       body: JSON.stringify({title})
     }).then(response => {
       if(response.ok) {
-        this.showMessage("created")
+        this.showMessage("edited")
     }
-    throw new Error('Request failed!');
-    }, networkError => {
-    console.log(networkError.message)
-    }).then(jsonResponse => {
-    return jsonResponse
-})
-  }
+    }, )
+}
 
 
 
@@ -108,9 +103,12 @@ export class App extends React.Component<{}, IState> {
             >
               >
             </textarea>
+          
             <button type="submit">add note</button>
           </form>
-          <List data={...data} deleteNote={this.deleteNote} />
+          <List data={...data} 
+                deleteNote={this.deleteNote} 
+                editNote={this.editNote}/>
           <div>{this.state.message}</div>
         </div>
       );

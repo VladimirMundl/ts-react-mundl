@@ -10,12 +10,14 @@ export default class List extends React.Component<IProps, IState> {
   }
 
   public render(): JSX.Element {
-    const { data, deleteNote } = this.props;
+    const { data, deleteNote, editNote } = this.props;
     return (
       <div>
         <h2>List of Notes</h2>
         {data.map((note: INote) => (
-          <SingleNote note={note} deleteNote={deleteNote} />
+          <SingleNote note={note} 
+                      deleteNote={deleteNote}
+                      editNote={editNote} />
         ))}
       </div>
     );
@@ -25,6 +27,7 @@ export default class List extends React.Component<IProps, IState> {
 interface IProps {
   data: Array<object>;
   deleteNote: (id: number) => void;
+  editNote: (id: number, title: string) => void;
 }
 
 interface IState {}
