@@ -16,6 +16,16 @@ export default class SingleNote extends React.Component<IProps, IState> {
     this.setState({ detail: !this.state.detail });
   }
 
+  public closeEditing(e: any): void {
+    if (e.target.classList.contains("edit")) {
+     null
+    }
+    else {
+      console.log(e);
+      this.setState({ edit: false });
+    }
+  }
+
   public openEditing(): void {
     this.setState({ edit: !this.state.edit });
   }
@@ -26,37 +36,38 @@ export default class SingleNote extends React.Component<IProps, IState> {
     this.setState({ edit: false });
   }
 
+  componentDidMount(): void {
+    document.addEventListener("mousedown", e => this.closeEditing(e));
+  }
+
   public render(): JSX.Element {
     const { note } = this.props;
     return (
       <div>
-        <h3>Note {note.id.toString().substring(0, 3)}</h3>
+        
         <div key={note.id}>
+        <i onClick={() => this.props.deleteNote(note.id)} className="fas fa-times" />
           {this.state.detail ? (
             <button onClick={() => this.showDetail()}>hide</button>
           ) : null}
-          <i
-            onClick={() => this.props.deleteNote(note.id)}
-            className="fas fa-times"
-          />
           {this.state.detail && !this.state.edit && (
             <div onClick={() => this.openEditing()}>{note.title}</div>
           )}
           {this.state.edit && (
-            <form onSubmit={e => this.handleSubmit(e)}>
-              {" "}
-              <input
-                type="text"
-                value={this.state.current}
-                onChange={e => this.setState({ current: e.target.value })}
-              />
-            </form>
+            <div >
+              <form onSubmit={e => this.handleSubmit(e)}>
+                <input
+                  className="edit"
+                  type="text"
+                  value={this.state.current}
+                  onChange={e => this.setState({ current: e.target.value })}
+                />
+              <button type="submit" className="edit">Save</button>
+              </form>  
+            </div>
           )}
-          {!this.state.detail && (
-            <div onClick={() => this.showDetail()}>{`${note.title.substring(
-              0,
-              9
-            )}...`}</div>
+          {!this.state.detail && !this.state.edit && (
+            <div onClick={() => this.openEditing()}>{`${note.title.substring(0,11)}...`}</div>
           )}
         </div>
       </div>

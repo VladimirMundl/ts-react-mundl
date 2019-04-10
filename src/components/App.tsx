@@ -79,7 +79,7 @@ export class App extends React.Component<{}, IState> {
 
   };
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     this.setState({ isLoading: true });
     fetch("https://private-anon-2520b377ba-note10.apiary-mock.com/notes")
       .then(response => response.json())

@@ -14,7 +14,8 @@
     "@devexpress/dx-react-grid": "^1.10.5",
     "@devexpress/dx-react-grid-bootstrap4": "^1.10.5",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "react-i18next": "^10.6.2"
   },
   "devDependencies": {
     "@types/react": "^16.8.10",
