@@ -13,9 +13,11 @@
     "@devexpress/dx-react-core": "^1.10.5",
     "@devexpress/dx-react-grid": "^1.10.5",
     "@devexpress/dx-react-grid-bootstrap4": "^1.10.5",
+    "@types/react-intl": "^2.3.17",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-i18next": "^10.6.2"
+    "react-intl": "^2.8.0",
+    "react-translated": "^2.4.0"
   },
   "devDependencies": {
     "@types/react": "^16.8.10",

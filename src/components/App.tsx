@@ -1,5 +1,20 @@
 import * as React from "react";
 import List from "./List";
+import { FormattedMessage } from "react-intl";
+import { IntlProvider, addLocaleData } from "react-intl";
+import locale_en from 'react-intl/locale-data/en';
+import locale_de from 'react-intl/locale-data/de';
+
+import * as messages_en from "../translations/en.json";
+import * as messages_de from "../translations/de.json";
+
+
+addLocaleData(locale_en);
+addLocaleData(locale_de);
+
+
+
+const language = navigator.language.split(/[-_]/)[0];
 
 export class App extends React.Component<{}, IState> {
   constructor(props: {}) {
@@ -11,9 +26,20 @@ export class App extends React.Component<{}, IState> {
       data: [],
       currentNote: "",
       notes: [],
-      message: ""
+      message: "",
+      locale: 'EN',
+      messages: messages_en
     };
   }
+
+  public onChangeLanguage = (lang:any): void => {
+    switch (lang) {
+        case 'EN': this.setState({messages: messages_en}); break;
+        case 'DE': this.setState({messages: messages_de}); break;
+    }
+    this.state.locale === "EN" ? this.setState({locale: lang}) :  this.setState({locale: "EN"});
+  }
+  
 
   public handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
     e.preventDefault();
@@ -36,7 +62,7 @@ export class App extends React.Component<{}, IState> {
       }
     )
       .then(response => console.log(response))
-      .then(this.showMessage("deleted"));
+      .then(() => this.showMessage("deleted"));
   };
 
   public addNote = (title: string): void => {
@@ -68,7 +94,7 @@ export class App extends React.Component<{}, IState> {
 
 
 
-  public showMessage = (action: string): any => {
+  public showMessage = (action: string): void => {
     this.setState({ message: action });
       setTimeout(
         function() {
@@ -76,6 +102,16 @@ export class App extends React.Component<{}, IState> {
         }.bind(this),
         3000
       );
+
+  };
+
+  public changeLanguage = (lang: string): void => {
+    if(this.state.locale === "EN") {
+      this.onChangeLanguage(lang)
+    }
+    else {
+      this.onChangeLanguage("EN")
+    }
 
   };
 
@@ -88,13 +124,19 @@ export class App extends React.Component<{}, IState> {
 
   public render(): JSX.Element {
     const { data, isLoading } = this.state;
+    console.log(locale_de)
 
     if (isLoading) {
       return <p>Loading...</p>;
     } else {
       return (
+        <IntlProvider locale={this.state.locale} messages={this.state.messages}>
         <div>
           <h2>New Note</h2>
+          <FormattedMessage id="header.note"
+                      defaultMessage="Nová poznámka"
+                      description="New Note"
+                      values={{ what: 'react-intl' }}/>
           <form onSubmit={e => this.handleSubmit(e)}>
             <textarea
               placeholder="add something"
@@ -110,7 +152,9 @@ export class App extends React.Component<{}, IState> {
                 deleteNote={this.deleteNote} 
                 editNote={this.editNote}/>
           <div>{this.state.message}</div>
+          <button onClick={() => this.changeLanguage("DE")}>change to DE</button>
         </div>
+        </IntlProvider>
       );
     }
   }
@@ -129,4 +173,10 @@ interface IState {
   currentNote: string;
   notes: Array<INote>;
   message: string;
+  locale: any;
+  messages:any;
+}
+
+interface IProps {
+  onChangeLanguage: (lang: string) => void;
 }

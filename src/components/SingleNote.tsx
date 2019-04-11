@@ -1,5 +1,6 @@
 import * as React from "react";
 import { INote } from "./App";
+import { SyntheticEvent } from 'react';
 
 export default class SingleNote extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -16,11 +17,12 @@ export default class SingleNote extends React.Component<IProps, IState> {
     this.setState({ detail: !this.state.detail });
   }
 
-  public closeEditing(e: any): void {
+  public closeEditing(e: { target: any }): void {
     if (e.target.classList.contains("edit")) {
      null
     }
     else {
+      console.log(e.target.classList)
       console.log(e);
       this.setState({ edit: false });
     }
@@ -30,7 +32,7 @@ export default class SingleNote extends React.Component<IProps, IState> {
     this.setState({ edit: !this.state.edit });
   }
 
-  handleSubmit(e: any): void {
+  handleSubmit(e: SyntheticEvent<{}>): void {
     e.preventDefault();
     this.props.editNote(this.props.note.id, this.state.current);
     this.setState({ edit: false });
@@ -86,3 +88,4 @@ interface IState {
   edit: boolean;
   current: string;
 }
+
