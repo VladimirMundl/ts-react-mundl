@@ -1,6 +1,7 @@
 import * as React from "react";
 import { INote } from "./App";
 import { SyntheticEvent } from 'react';
+import { FormattedMessage } from "react-intl";
 
 export default class SingleNote extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -64,7 +65,12 @@ export default class SingleNote extends React.Component<IProps, IState> {
                   value={this.state.current}
                   onChange={e => this.setState({ current: e.target.value })}
                 />
-              <button type="submit" className="edit">Save</button>
+              <button type="submit" className="edit">
+              <FormattedMessage id="save"
+                        defaultMessage="Uložit"
+                        description="Save"
+                        values={{ what: 'react-intl' }} />
+              </button>
               </form>  
             </div>
           )}

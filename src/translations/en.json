@@ -1,4 +1,10 @@
 {
-    "header.note": "New Note",
-    "header.list": "List of Notes"
+    "header.note" : "New Note",
+    "header.list" : "List of Notes",
+    "write.note" : "Write a note",
+    "add.note" : "Add note",
+    "save" : "Save",
+    "created" : "Created",
+    "edited" : "Edited",
+    "deleted" : "Deleted"
 }
