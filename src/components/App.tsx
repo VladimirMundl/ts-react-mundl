@@ -11,6 +11,27 @@ import * as messages_de from "../translations/de.json";
 addLocaleData(locale_en);
 addLocaleData(locale_de);
 
+export interface INote {
+  title: string;
+  id: number;
+}
+
+interface IState {
+  isLoading: boolean;
+  invalidText: boolean;
+  data: Array<object>;
+  currentNote: string;
+  notes: Array<INote>;
+  message: string;
+  locale: any;
+  messages: any;
+}
+
+interface IProps {
+  onChangeLanguage: (lang: string) => void;
+}
+
+
 export class App extends React.Component<{}, IState> {
   constructor(props: {}) {
     super(props);
@@ -178,7 +199,8 @@ export class App extends React.Component<{}, IState> {
                 values={{ what: "react-intl" }}
               />
             </h2>
-            <form onSubmit={e => this.handleSubmit(e)}>
+      
+            <form className="form-note" onSubmit={e => this.handleSubmit(e)}>
               <textarea
                 placeholder="..."
                 value={this.state.currentNote}
@@ -187,11 +209,12 @@ export class App extends React.Component<{}, IState> {
               </textarea>
               <button type="submit"><FormattedMessage
                 id="add.note"
-                defaultMessage="nahraj poznámku"
+                defaultMessage="Ulož poznámku"
                 description="Add Note"
                 values={{ what: "react-intl" }}
               /></button>
             </form>
+       
             <List
               data={...data}
               deleteNote={this.deleteNote}
@@ -205,22 +228,3 @@ export class App extends React.Component<{}, IState> {
   }
 }
 
-export interface INote {
-  title: string;
-  id: number;
-}
-
-interface IState {
-  isLoading: boolean;
-  invalidText: boolean;
-  data: Array<object>;
-  currentNote: string;
-  notes: Array<INote>;
-  message: string;
-  locale: any;
-  messages: any;
-}
-
-interface IProps {
-  onChangeLanguage: (lang: string) => void;
-}

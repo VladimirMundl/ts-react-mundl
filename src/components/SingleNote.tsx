@@ -1,7 +1,18 @@
 import * as React from "react";
 import { INote } from "./App";
 import { SyntheticEvent } from "react";
-import { FormattedMessage } from "react-intl";
+
+interface IProps {
+  note: INote;
+  deleteNote: (id: number) => void;
+  editNote: (id: number, title: string) => void;
+}
+
+interface IState {
+  detail: boolean;
+  edit: boolean;
+  current: string;
+}
 
 export default class SingleNote extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -79,16 +90,4 @@ export default class SingleNote extends React.Component<IProps, IState> {
       </div>
     );
   }
-}
-
-interface IProps {
-  note: INote;
-  deleteNote: (id: number) => void;
-  editNote: (id: number, title: string) => void;
-}
-
-interface IState {
-  detail: boolean;
-  edit: boolean;
-  current: string;
 }

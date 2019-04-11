@@ -3,7 +3,14 @@ import SingleNote from "./SingleNote";
 import { INote } from "./App";
 import { FormattedMessage } from "react-intl";
 
-export default class List extends React.Component<IProps, IState> {
+interface IProps {
+  data: Array<object>;
+  deleteNote: (id: number) => void;
+  editNote: (id: number, title: string) => void;
+}
+
+
+export default class List extends React.Component<IProps, {}> {
   constructor(props: IProps) {
     super(props);
 
@@ -30,10 +37,4 @@ export default class List extends React.Component<IProps, IState> {
   }
 }
 
-interface IProps {
-  data: Array<object>;
-  deleteNote: (id: number) => void;
-  editNote: (id: number, title: string) => void;
-}
 
-interface IState {}
