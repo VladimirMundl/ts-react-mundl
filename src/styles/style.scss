@@ -5,4 +5,17 @@ body {
   font-size: 14px;
   line-height: 1.3rem;
   background-color: $background-grey;
+  
+}
+
+span {
+  width: 500px;
+}
+
+.icon {
+  margin: 10px;
+}
+
+.note {
+  display: inline-flex;
 }

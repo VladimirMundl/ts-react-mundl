@@ -22,9 +22,9 @@ export default class SingleNote extends React.Component<IProps, IState> {
     if (e.target.classList.contains("edit")) {
      null
     }
+
     else {
-      console.log(e.target.classList)
-      console.log(e);
+      console.log(e.target)
       this.setState({ edit: false });
     }
   }
@@ -49,15 +49,13 @@ export default class SingleNote extends React.Component<IProps, IState> {
       <div>
         
         <div key={note.id}>
-        <i onClick={() => this.props.deleteNote(note.id)} className="fas fa-times" />
-          {this.state.detail ? (
-            <button onClick={() => this.showDetail()}>hide</button>
-          ) : null}
+        <div className="note">
+        <i onClick={() => this.props.deleteNote(note.id)} className="fas fa-times icon" />
           {this.state.detail && !this.state.edit && (
-            <div onClick={() => this.openEditing()}>{note.title}</div>
+            <span onClick={() => this.openEditing()}>{note.title}</span>
           )}
           {this.state.edit && (
-            <div >
+            <div className="edit">
               <form onSubmit={e => this.handleSubmit(e)}>
                 <input
                   className="edit"
@@ -65,18 +63,16 @@ export default class SingleNote extends React.Component<IProps, IState> {
                   value={this.state.current}
                   onChange={e => this.setState({ current: e.target.value })}
                 />
-              <button type="submit" className="edit">
-              <FormattedMessage id="save"
-                        defaultMessage="Uložit"
-                        description="Save"
-                        values={{ what: 'react-intl' }} />
+              <button type="submit" className="edit" id="button">
+              save
               </button>
               </form>  
             </div>
           )}
           {!this.state.detail && !this.state.edit && (
-            <div onClick={() => this.openEditing()}>{`${note.title.substring(0,11)}...`}</div>
+            <span onClick={() => this.openEditing()}>{`${note.title.substring(0,11)}...`}</span>
           )}
+          </div>
         </div>
       </div>
     );
