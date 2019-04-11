@@ -162,7 +162,6 @@ export class App extends React.Component<{}, IState> {
 
   public render(): JSX.Element {
     const { data, isLoading } = this.state;
-    console.log(locale_de);
 
     if (isLoading) {
       return <p>Loading...</p>;
@@ -185,9 +184,7 @@ export class App extends React.Component<{}, IState> {
                 value={this.state.currentNote}
                 onChange={e => this.setState({ currentNote: e.target.value })}
               >
-                >
               </textarea>
-
               <button type="submit"><FormattedMessage
                 id="add.note"
                 defaultMessage="nahraj poznámku"
@@ -201,7 +198,6 @@ export class App extends React.Component<{}, IState> {
               editNote={this.editNote}
             />
             <div>{this.renderMessage()}</div>
-            
           </div>
         </IntlProvider>
       );
